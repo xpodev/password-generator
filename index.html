@@ -8,9 +8,7 @@
     <script src="script.js" defer></script>
   </head>
   <body class="bg-gray-900">
-    <div
-      class="flex flex-col items-center justify-center min-h-screen"
-    >
+    <div class="flex flex-col items-center justify-center min-h-screen">
       <div class="flex-grow flex flex-col items-center justify-center">
         <h1 class="text-3xl font-bold text-white text-center mb-6">
           Password Generator
@@ -24,22 +22,36 @@
               <input
                 type="number"
                 id="length"
-                class="w-20 p-2 bg-gray-700 text-white rounded focus:outline-none"
+                class="p-2 bg-gray-700 text-white rounded focus:outline-none"
                 value="16"
                 min="4"
               />
             </div>
-            <div class="flex items-center justify-between">
-              <label for="level" class="text-white">Level:</label>
-              <select
-                id="level"
-                class="w-20 p-2 bg-gray-700 text-white rounded focus:outline-none"
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3" selected>3</option>
-                <option value="4">4</option>
-              </select>
+            <div class="flex flex-col justify-between">
+              <div>
+                <input type="checkbox" id="lower" checked />
+                <label for="lower">
+                  <span class="text-white">Lowercase characters</span>
+                </label>
+              </div>
+              <div>
+                <input type="checkbox" id="upper" checked />
+                <label for="upper">
+                  <span class="text-white">Uppercase characters</span>
+                </label>
+              </div>
+              <div>
+                <input type="checkbox" id="digits" checked />
+                <label for="digits">
+                  <span class="text-white">Digits</span>
+                </label>
+              </div>
+              <div>
+                <input type="checkbox" id="symbols" />
+                <label for="symbols">
+                  <span class="text-white">Symbols</span>
+                </label>
+              </div>
             </div>
             <button
               id="generate"
@@ -48,9 +60,7 @@
               Generate
             </button>
             <div class="relative">
-              <label for="password" class="hidden">
-                Password
-              </label>
+              <label for="password" class="hidden"> Password </label>
               <input
                 type="text"
                 id="password"
@@ -63,33 +73,6 @@
               >
                 Copy
               </button>
-            </div>
-          </div>
-        </div>
-        <div class="mt-8 w-full text-gray-200">
-          <h2 class="text-lg font-bold mb-2 text-center">
-            Password Level Explanation
-          </h2>
-          <div class="flex flex-col gap-1 text-sm">
-            <div>
-              <strong class="text-blue-400">Level 1</strong>
-              <span class="text-gray-300">- Lowercase only</span>
-            </div>
-            <div>
-              <strong class="text-blue-400">Level 2</strong>
-              <span class="text-gray-300"> - Lowercase and Uppercase</span>
-            </div>
-            <div>
-              <strong class="text-blue-400">Level 3</strong>
-              <span class="text-gray-300">
-                - Lowercase, Uppercase, and Numbers</span
-              >
-            </div>
-            <div>
-              <strong class="text-blue-400">Level 4</strong>
-              <span class="text-gray-300">
-                - Lowercase, Uppercase, Numbers, and Symbols
-              </span>
             </div>
           </div>
         </div>
