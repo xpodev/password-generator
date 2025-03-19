@@ -2,10 +2,44 @@ var lowerCase = "abcdefghijklmnopqrstuvwxyz";
 var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numbers = "0123456789";
 var symbols = "!@#$%^&*()_+-=";
-var pickRandomChar = function (string) {
+function fallbackCopyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+
+  // Avoid scrolling to bottom
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.position = "fixed";
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Fallback: Copying text command was ' + msg);
+  } catch (err) {
+    console.error('Fallback: Oops, unable to copy', err);
+  }
+
+  document.body.removeChild(textArea);
+}
+function copyTextToClipboard(text) {
+  if (!navigator.clipboard) {
+    fallbackCopyTextToClipboard(text);
+    return;
+  }
+  navigator.clipboard.writeText(text).then(function () {
+    console.log('Async: Copying to clipboard was successful!');
+  }, function (err) {
+    console.error('Async: Could not copy text: ', err);
+  });
+}
+function pickRandomChar(string) {
   return string.charAt(Math.floor(Math.random() * string.length));
 };
-var generatePassword = function (params) {
+function generatePassword(params) {
   params = params || {
     length: 16,
     lower: true,
@@ -36,24 +70,22 @@ var generatePassword = function (params) {
   generatedPassword += generatePasswordFrom(chars, params.length - generatedPassword.length);
   return generatedPassword.split("").sort(() => Math.random() - 0.5).join("");
 };
-var generatePasswordFrom = function (chars, length) {
+function generatePasswordFrom(chars, length) {
   var password = "";
   for (var i = 0; i < length; i++) {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return password;
 };
-var parse = function (value) {
+function parse(value) {
   if (value === "true") return true;
   if (value === "false") return false;
   if (isNaN(parseInt(value))) return value;
   return parseInt(value);
 };
-var copyPassword = function () {
-  password.select();
-  document.execCommand("copy");
+function copyPassword() {
+  copyTextToClipboard(password.value);
   copy.innerText = "Copied!";
-  password.blur();
 };
 var params = {
   length: 16,
