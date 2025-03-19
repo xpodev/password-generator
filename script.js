@@ -36,9 +36,6 @@ function copyTextToClipboard(text) {
     console.error('Async: Could not copy text: ', err);
   });
 }
-function pickRandomChar(string) {
-  return string.charAt(Math.floor(Math.random() * string.length));
-};
 function generatePassword(params) {
   params = params || {
     length: 16,
@@ -53,19 +50,19 @@ function generatePassword(params) {
   var generatedPassword = "";
   if (params.lower) {
     chars += lowerCase;
-    generatedPassword += pickRandomChar(lowerCase);
+    generatedPassword += generatePasswordFrom(lowerCase, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.upper) {
     chars += upperCase;
-    generatedPassword += pickRandomChar(upperCase);
+    generatedPassword += generatePasswordFrom(upperCase, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.numbers) {
     chars += numbers;
-    generatedPassword += pickRandomChar(numbers);
+    generatedPassword += generatePasswordFrom(numbers, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.symbols) {
     chars += symbols;
-    generatedPassword += pickRandomChar(symbols);
+    generatedPassword += generatePasswordFrom(symbols, Math.min(1, params.length - generatedPassword.length));
   }
   generatedPassword += generatePasswordFrom(chars, params.length - generatedPassword.length);
   return generatedPassword.split("").sort(() => Math.random() - 0.5).join("");
