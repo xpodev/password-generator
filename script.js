@@ -53,6 +53,7 @@ var copyPassword = function () {
   password.select();
   document.execCommand("copy");
   copy.innerText = "Copied!";
+  password.blur();
 };
 var params = {
   length: 16,
