@@ -12,7 +12,7 @@ A simple password generator that allows users to generate secure passwords with 
 - **Copy Password**: Quickly copy the generated password to your clipboard.
 
 ## Live Demo
-You can try the password generator live at the following URL: [Password Generator Live Demo](https://password-gen.xpo.dev)
+You can try the password generator live at the following URL: [Password Generator](https://password-gen.xpo.dev)
 
 ## How to Use
 1. **Set the Length**: Use the input field to set the desired length of your password (minimum 4 characters, no upper limit).
