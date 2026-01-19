@@ -4,11 +4,15 @@ A simple password generator that allows users to generate secure passwords with 
 
 ## Features
 - **Password Length**: Set the desired password length (minimum 4 characters, no upper limit).
-- **Security Levels**: Choose between four different levels of password complexity:
-  - **Level 1**: Lowercase letters only
-  - **Level 2**: Lowercase and Uppercase letters
-  - **Level 3**: Lowercase, Uppercase letters, and Numbers
-  - **Level 4**: Lowercase, Uppercase letters, Numbers, and Symbols
+- **Generation Modes**: Choose between three different generation modes:
+  - **Standard Password**: Customizable password with options for lowercase, uppercase, numbers, and symbols
+  - **Hex String**: Random hexadecimal string (0-9, a-f)
+  - **Base64 String**: Random base64-encoded string
+- **Character Options** (Standard Password mode only):
+  - Lowercase letters
+  - Uppercase letters
+  - Numbers
+  - Symbols
 - **Copy Password**: Quickly copy the generated password to your clipboard.
 
 ## Live Demo
@@ -16,8 +20,11 @@ You can try the password generator live at the following URL: [Password Generato
 
 ## How to Use
 1. **Set the Length**: Use the input field to set the desired length of your password (minimum 4 characters, no upper limit).
-2. **Choose the Level**: Select the desired security level from the dropdown.
-3. **Generate Password**: Click the "Generate" button to create a secure password based on the selected criteria.
+2. **Choose the Mode**: Select your preferred generation mode:
+   - **Standard Password**: Customize with character options (lowercase, uppercase, digits, symbols)
+   - **Hex String**: Generate a random hexadecimal string
+   - **Base64 String**: Generate a random base64-encoded string
+3. **Generate Password**: Click the "Generate" button to create a new string based on the selected criteria, or simply change any option to auto-generate.
 4. **Copy Password**: After the password is generated, you can click the "Copy" button to copy it to your clipboard.
 
 ## Setup
