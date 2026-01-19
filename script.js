@@ -88,17 +88,28 @@ function generatePasswordFrom(chars, length) {
 };
 function generateHexString(length) {
   var hexChars = "0123456789abcdef";
+  var bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
   var result = "";
   for (var i = 0; i < length; i++) {
-    result += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+    result += hexChars.charAt(bytes[i] % 16);
   }
   return result;
 };
 function generateBase64String(length) {
-  // Generate random bytes and convert to base64
-  var bytes = new Uint8Array(Math.ceil(length * 3 / 4));
+  // Base64 encoding produces 4 characters for every 3 bytes
+  // Generate enough bytes to ensure we get at least 'length' base64 characters
+  var numBytes = Math.ceil(length / 4) * 3;
+  var bytes = new Uint8Array(numBytes);
   crypto.getRandomValues(bytes);
-  var base64 = btoa(String.fromCharCode.apply(null, bytes));
+  
+  // Convert bytes to base64, handling large arrays safely
+  var binary = '';
+  for (var i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  var base64 = btoa(binary);
+  
   // Trim to requested length
   return base64.substring(0, length);
 };
