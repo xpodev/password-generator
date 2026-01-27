@@ -43,9 +43,21 @@ function generatePassword(params) {
     upper: true,
     numbers: true,
     symbols: false,
+    mode: "standard",
   };
 
   copy.innerText = "Copy";
+  
+  // Handle different generation modes
+  if (params.mode === "hex") {
+    return generateHexString(params.length);
+  }
+  
+  if (params.mode === "base64") {
+    return generateBase64String(params.length);
+  }
+  
+  // Standard password generation
   var chars = "";
   var generatedPassword = "";
   if (params.lower) {
@@ -74,6 +86,33 @@ function generatePasswordFrom(chars, length) {
   }
   return password;
 };
+function generateHexString(length) {
+  var hexChars = "0123456789abcdef";
+  var bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  var result = "";
+  for (var i = 0; i < length; i++) {
+    result += hexChars.charAt(bytes[i] % 16);
+  }
+  return result;
+};
+function generateBase64String(length) {
+  // Base64 encoding produces 4 characters for every 3 bytes
+  // Generate enough bytes to ensure we get at least 'length' base64 characters
+  var numBytes = Math.ceil(length / 4) * 3;
+  var bytes = new Uint8Array(numBytes);
+  crypto.getRandomValues(bytes);
+  
+  // Convert bytes to base64, handling large arrays safely
+  var binary = '';
+  for (var i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  var base64 = btoa(binary);
+  
+  // Trim to requested length
+  return base64.substring(0, length);
+};
 function parse(value) {
   if (value === "true") return true;
   if (value === "false") return false;
@@ -90,12 +129,17 @@ var params = {
   upper: true,
   numbers: true,
   symbols: false,
+  mode: "standard",
 };
 var length = document.getElementById("length");
 var lowerCheckbox = document.getElementById("lower");
 var upperCheckbox = document.getElementById("upper");
 var digitsCheckbox = document.getElementById("digits");
 var symbolsCheckbox = document.getElementById("symbols");
+var modeStandard = document.getElementById("mode-standard");
+var modeHex = document.getElementById("mode-hex");
+var modeBase64 = document.getElementById("mode-base64");
+var characterOptions = document.getElementById("character-options");
 var generate = document.getElementById("generate");
 var password = document.getElementById("password");
 var copy = document.getElementById("copy");
@@ -127,5 +171,20 @@ password.addEventListener("click", function () {
 });
 copy.addEventListener("click", function () {
   copyPassword();
+});
+modeStandard.addEventListener("change", function () {
+  params.mode = "standard";
+  characterOptions.style.display = "block";
+  password.value = generatePassword(params);
+});
+modeHex.addEventListener("change", function () {
+  params.mode = "hex";
+  characterOptions.style.display = "none";
+  password.value = generatePassword(params);
+});
+modeBase64.addEventListener("change", function () {
+  params.mode = "base64";
+  characterOptions.style.display = "none";
+  password.value = generatePassword(params);
 });
 password.value = generatePassword();

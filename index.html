@@ -28,6 +28,28 @@
               />
             </div>
             <div class="flex flex-col justify-between">
+              <label class="text-white font-semibold mb-2">Mode:</label>
+              <div>
+                <input type="radio" id="mode-standard" name="mode" value="standard" checked />
+                <label for="mode-standard">
+                  <span class="text-white">Standard Password</span>
+                </label>
+              </div>
+              <div>
+                <input type="radio" id="mode-hex" name="mode" value="hex" />
+                <label for="mode-hex">
+                  <span class="text-white">Hex String</span>
+                </label>
+              </div>
+              <div>
+                <input type="radio" id="mode-base64" name="mode" value="base64" />
+                <label for="mode-base64">
+                  <span class="text-white">Base64 String</span>
+                </label>
+              </div>
+            </div>
+            <div id="character-options" class="flex flex-col justify-between">
+              <label class="text-white font-semibold mb-2">Characters:</label>
               <div>
                 <input type="checkbox" id="lower" checked />
                 <label for="lower">
