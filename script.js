@@ -2,6 +2,7 @@ var lowerCase = "abcdefghijklmnopqrstuvwxyz";
 var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numbers = "0123456789";
 var symbols = "!@#$%^&*()_+-=";
+var ambiguousChars = "0Oo1lI";
 function fallbackCopyTextToClipboard(text) {
   var textArea = document.createElement("textarea");
   textArea.value = text;
@@ -43,6 +44,7 @@ function generatePassword(params) {
     upper: true,
     numbers: true,
     symbols: false,
+    nonAmbiguous: false,
     mode: "standard",
   };
 
@@ -58,23 +60,31 @@ function generatePassword(params) {
   }
   
   // Standard password generation
+  var filterAmbiguous = function(chars) {
+    if (!params.nonAmbiguous) return chars;
+    return chars.split("").filter(function(c) { return ambiguousChars.indexOf(c) === -1; }).join("");
+  };
   var chars = "";
   var generatedPassword = "";
   if (params.lower) {
-    chars += lowerCase;
-    generatedPassword += generatePasswordFrom(lowerCase, Math.min(1, params.length - generatedPassword.length));
+    var lower = filterAmbiguous(lowerCase);
+    chars += lower;
+    generatedPassword += generatePasswordFrom(lower, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.upper) {
-    chars += upperCase;
-    generatedPassword += generatePasswordFrom(upperCase, Math.min(1, params.length - generatedPassword.length));
+    var upper = filterAmbiguous(upperCase);
+    chars += upper;
+    generatedPassword += generatePasswordFrom(upper, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.numbers) {
-    chars += numbers;
-    generatedPassword += generatePasswordFrom(numbers, Math.min(1, params.length - generatedPassword.length));
+    var nums = filterAmbiguous(numbers);
+    chars += nums;
+    generatedPassword += generatePasswordFrom(nums, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.symbols) {
-    chars += symbols;
-    generatedPassword += generatePasswordFrom(symbols, Math.min(1, params.length - generatedPassword.length));
+    var syms = filterAmbiguous(symbols);
+    chars += syms;
+    generatedPassword += generatePasswordFrom(syms, Math.min(1, params.length - generatedPassword.length));
   }
   generatedPassword += generatePasswordFrom(chars, params.length - generatedPassword.length);
   return generatedPassword.split("").sort(() => Math.random() - 0.5).join("");
@@ -129,6 +139,7 @@ var params = {
   upper: true,
   numbers: true,
   symbols: false,
+  nonAmbiguous: false,
   mode: "standard",
 };
 var length = document.getElementById("length");
@@ -136,6 +147,7 @@ var lowerCheckbox = document.getElementById("lower");
 var upperCheckbox = document.getElementById("upper");
 var digitsCheckbox = document.getElementById("digits");
 var symbolsCheckbox = document.getElementById("symbols");
+var nonAmbiguousCheckbox = document.getElementById("non-ambiguous");
 var modeStandard = document.getElementById("mode-standard");
 var modeHex = document.getElementById("mode-hex");
 var modeBase64 = document.getElementById("mode-base64");
@@ -161,6 +173,10 @@ digitsCheckbox.addEventListener("input", function () {
 });
 symbolsCheckbox.addEventListener("input", function () {
   params.symbols = symbolsCheckbox.checked;
+  password.value = generatePassword(params);
+});
+nonAmbiguousCheckbox.addEventListener("input", function () {
+  params.nonAmbiguous = nonAmbiguousCheckbox.checked;
   password.value = generatePassword(params);
 });
 generate.addEventListener("click", function () {
