@@ -2,6 +2,7 @@ var lowerCase = "abcdefghijklmnopqrstuvwxyz";
 var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 var numbers = "0123456789";
 var symbols = "!@#$%^&*()_+-=";
+var urlSafeSymbols = "-_.~";
 function fallbackCopyTextToClipboard(text) {
   var textArea = document.createElement("textarea");
   textArea.value = text;
@@ -43,6 +44,7 @@ function generatePassword(params) {
     upper: true,
     numbers: true,
     symbols: false,
+    urlSafe: false,
     mode: "standard",
   };
 
@@ -73,8 +75,9 @@ function generatePassword(params) {
     generatedPassword += generatePasswordFrom(numbers, Math.min(1, params.length - generatedPassword.length));
   }
   if (params.symbols) {
-    chars += symbols;
-    generatedPassword += generatePasswordFrom(symbols, Math.min(1, params.length - generatedPassword.length));
+    var symbolChars = params.urlSafe ? urlSafeSymbols : symbols;
+    chars += symbolChars;
+    generatedPassword += generatePasswordFrom(symbolChars, Math.min(1, params.length - generatedPassword.length));
   }
   generatedPassword += generatePasswordFrom(chars, params.length - generatedPassword.length);
   return generatedPassword.split("").sort(() => Math.random() - 0.5).join("");
@@ -129,6 +132,7 @@ var params = {
   upper: true,
   numbers: true,
   symbols: false,
+  urlSafe: false,
   mode: "standard",
 };
 var length = document.getElementById("length");
@@ -136,6 +140,7 @@ var lowerCheckbox = document.getElementById("lower");
 var upperCheckbox = document.getElementById("upper");
 var digitsCheckbox = document.getElementById("digits");
 var symbolsCheckbox = document.getElementById("symbols");
+var urlSafeCheckbox = document.getElementById("url-safe");
 var modeStandard = document.getElementById("mode-standard");
 var modeHex = document.getElementById("mode-hex");
 var modeBase64 = document.getElementById("mode-base64");
@@ -161,6 +166,10 @@ digitsCheckbox.addEventListener("input", function () {
 });
 symbolsCheckbox.addEventListener("input", function () {
   params.symbols = symbolsCheckbox.checked;
+  password.value = generatePassword(params);
+});
+urlSafeCheckbox.addEventListener("input", function () {
+  params.urlSafe = urlSafeCheckbox.checked;
   password.value = generatePassword(params);
 });
 generate.addEventListener("click", function () {
